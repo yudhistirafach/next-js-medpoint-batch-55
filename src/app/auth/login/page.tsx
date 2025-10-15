@@ -11,8 +11,8 @@ import { Input } from '@/components';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import LoginIcon from '@mui/icons-material/Login';
-import React from 'react';
 import { Alert, Snackbar } from '@mui/material';
+import React from 'react';
 
 export default function LoginPage() {
   const [errors, setErrors] = React.useState<{
@@ -60,11 +60,11 @@ export default function LoginPage() {
       if (!result?.success) {
         setAlert({
           open: true,
-          message: 'Username dan password salah',
+          message: result.error,
           severity: 'error',
         });
       }
-    } catch (error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (error) {  // eslint-disable-line @typescript-eslint/no-unused-vars
       setAlert({
         open: true,
         message: 'Terjadi kesalahan pada server. Silahkan coba lagi.',
