@@ -37,6 +37,7 @@ jobs:
 
   deploy:
     name: Build and Deploy to Vercel
+    needs: builds
     runs-on: ubuntu-latest
 
     steps:
