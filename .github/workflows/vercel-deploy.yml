@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-output
-          path: ./.github/publish
+          path: .next
 
   deploy:
     name: Build and Deploy to Vercel
@@ -48,7 +48,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-output
-          path: ./.github/publish
+          path: .next
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
