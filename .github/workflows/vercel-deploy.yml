@@ -19,6 +19,10 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup Gitea token for dependencies
+        run: |
+          git config --global url."https://${{ secrets.GITEA_ACCESS_TOKEN }}@gitea.sev-2.com".insteadOf ssh://gitea.sev-2.com
+
       - name: Install dependencies
         run: npm install
 
