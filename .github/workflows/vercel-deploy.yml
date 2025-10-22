@@ -6,8 +6,8 @@ on:
       - "v*" # Menjalankan pipelane ketika previx dari push tagnya 'v' (example: v1.0.1)
 
 jobs:
-  build:
-    name: Build Application
+  deploy:
+    name: Build and Deploy to Vercel
     runs-on: ubuntu-latest
 
     steps:
@@ -28,20 +28,6 @@ jobs:
 
       - name: Build Project
         run: npm run build
-
-  deploy:
-    name: Build and Deploy to Vercel
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
 
       - name: Install vercel CLI
         run: npm install -g vercel
