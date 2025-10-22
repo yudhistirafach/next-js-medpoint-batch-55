@@ -11,15 +11,45 @@ export async function loginAction(formData: FormData) {
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
+  const email = formData.get('email');
+  const password = formData.get('password');
+
+  if (!email || !password) {
+    return {
+      success: false,
+      error: 'Email dan password tidak boleh kosong',
+    };
+  }
+
+  if (typeof email !== 'string' || typeof password !== 'string') {
+    return {
+      success: false,
+      error: 'Kesalahan format dalam input',
+    };
+  }
+
+  const trimmedEmail = email.trim();
+  const trimmedPassword = password.trim();
+
+  if (!trimmedEmail || !trimmedPassword) {
+    return {
+      success: false,
+      error: 'Email dan password tidak boleh kosong',
+    };
+  }
+
+  const credentials = {
+    email: trimmedEmail,
+    password: trimmedPassword,
   };
 
-  const { error } = await supabase.auth.signInWithPassword(data);
+  const { error } = await supabase.auth.signInWithPassword(credentials);
 
   if (error) {
-    redirect('/error');
+    return {
+      success: false,
+      error: error.message,
+    };
   }
 
   revalidatePath(APP_DASHBOARD, 'layout');
