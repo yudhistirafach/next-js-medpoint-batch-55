@@ -3,7 +3,7 @@ name: Medpoint App Deployment
 on:
   push:
     tags:
-      - "v*"
+      - "v*" # Menjalankan pipelane ketika previx dari push tagnya 'v' (example: v1.0.1)
 
 env:
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -12,7 +12,6 @@ env:
   NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
   GITEA_TOKEN: ${{ secrets.GITEA_ACCESS_TOKEN }}
-  GITEA_USERNAME: ${{ secrets.GITEA_USERNAME }}
 
 jobs:
   deploy:
@@ -29,36 +28,18 @@ jobs:
           node-version: 20
           cache: "yarn"
 
-      - name: Setup SSH for Gitea
+      - name: Setup Gitea token for dependencies
         run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-          ssh-keyscan gitea.sev-2.com >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-
-          echo "Host gitea.sev-2.com" >> ~/.ssh/config
-          echo "  StrictHostKeyChecking no" >> ~/.ssh/config
-          echo "  UserKnownHostsFile /dev/null" >> ~/.ssh/config
-          chmod 600 ~/.ssh/config
-
-          ssh -T git@gitea.sev-2.com || true
+          git config --global url."https://${GITEA_TOKEN}@gitea.sev-2.com".insteadOf ssh://gitea.sev-2.com
 
       - name: Install dependencies
-        run: |
-          yarn install --network-timeout 300000
+        run: yarn install
 
       - name: Build Project
         run: yarn build
 
-      - name: Install Vercel CLI
+      - name: Install vercel CLI
         run: npm install -g vercel
 
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-
       - name: Deploy to Vercel
-        run: vercel --prod --yes --token=$VERCEL_TOKEN
+        run: vercel --prod --yes --token=$VERCEL_TOKEN --scope=$VERCEL_ORG_ID
