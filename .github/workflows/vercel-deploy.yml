@@ -22,5 +22,28 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "yarn"
+
+      - name: Setup Gitea token for dependencies
+        run: |
+          git config --global url."https://${GITEA_TOKEN}@gitea.sev-2.com".insteadOf ssh://gitea.sev-2.com
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Pull Vercel project settings
+        run: |
+          npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+
+      - name: Build Project in Vercel
+        run: npx vercel build --token=$VERCEL_TOKEN
+
+      - name: Install vercel CLI
+        run: npm install -g vercel
+
       - name: Deploy to Vercel
-        run: npx vercel --prod --yes --token=$VERCEL_TOKEN
+        run: vercel --prod --yes --token=$VERCEL_TOKEN --prebuilt
