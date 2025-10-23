@@ -18,19 +18,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: "yarn"
 
       - name: Setup Gitea token for dependencies
+        env:
+          GITEA_TOKEN: ${{ secrets.GITEA_ACCESS_TOKEN }}
         run: |
-          git config --global url."https://${{ secrets.GITEA_ACCESS_TOKEN }}@gitea.sev-2.com".insteadOf ssh://gitea.sev-2.com
+          git config --global url."https://$GITEA_TOKEN@gitea.sev-2.com".insteadOf ssh://gitea.sev-2.com
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: yarn install
 
       - name: Build Project
-        run: npm run build
+        run: yarn build
 
       - name: Install vercel CLI
-        run: npm install -g vercel
+        run: yarn install -g vercel
 
       - name: Deploy to Vercel
         env:
