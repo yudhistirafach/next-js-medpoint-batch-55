@@ -33,7 +33,7 @@ jobs:
         run: yarn build
 
       - name: Install vercel CLI
-        run: yarn install -g vercel
+        run: npm install -g vercel
 
       - name: Deploy to Vercel
         env:
