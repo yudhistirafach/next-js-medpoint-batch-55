@@ -5,6 +5,14 @@ on:
     tags:
       - "v*" # Menjalankan pipelane ketika previx dari push tagnya 'v' (example: v1.0.1)
 
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+  GITEA_TOKEN: ${{ secrets.GITEA_ACCESS_TOKEN }}
+
 jobs:
   deploy:
     name: Build and Deploy to Vercel
@@ -21,8 +29,6 @@ jobs:
           cache: "yarn"
 
       - name: Setup Gitea token for dependencies
-        env:
-          GITEA_TOKEN: ${{ secrets.GITEA_ACCESS_TOKEN }}
         run: |
           git config --global url."https://$GITEA_TOKEN@gitea.sev-2.com".insteadOf ssh://gitea.sev-2.com
 
@@ -36,10 +42,4 @@ jobs:
         run: npm install -g vercel
 
       - name: Deploy to Vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: vercel --prod --yes --token=$VERCEL_TOKEN --scope=$VERCEL_ORG_ID
