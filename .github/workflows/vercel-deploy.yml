@@ -12,38 +12,29 @@ env:
   NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
   GITEA_TOKEN: ${{ secrets.GITEA_ACCESS_TOKEN }}
+  GITEA_USERNAME: ${{ secrets.GITEA_USERNAME }}
 
 jobs:
   deploy:
-    name: Build and Deploy to Vercel
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout source code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "yarn"
-
-      - name: Setup Gitea token for dependencies
-        run: |
-          git config --global url."https://${GITEA_TOKEN}@gitea.sev-2.com".insteadOf ssh://gitea.sev-2.com
 
       - name: Install dependencies
-        run: yarn install
-
-      - name: Pull Vercel project settings
         run: |
-          npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+          git config --global url."https://$GITEA_USERNAME:$GITEA_TOKEN@gitea.sev-2.com".insteadOf "ssh://gitea.sev-2.com"
+          yarn install --network-timeout 300000
 
-      - name: Build Project in Vercel
-        run: npx vercel build --token=$VERCEL_TOKEN
+      - name: Build dengan Vercel
+        run: |
+          npx vercel build --prod --token=$VERCEL_TOKEN
 
-      - name: Install vercel CLI
-        run: npm install -g vercel
-
-      - name: Deploy to Vercel
-        run: vercel --prod --yes --token=$VERCEL_TOKEN
+      - name: Deploy PREBUILT
+        run: |
+          npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
