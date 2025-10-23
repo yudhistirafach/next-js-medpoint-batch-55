@@ -33,9 +33,9 @@ jobs:
 
       - name: Build dengan Vercel
         run: |
-          vercel pull --yes
-          npx vercel build --prod --token=$VERCEL_TOKEN
+          npx vercel pull --yes --token=${VERCEL_TOKEN}
+          npx vercel build --prod --token=${VERCEL_TOKEN}
 
       - name: Deploy PREBUILT
         run: |
-          npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+          npx vercel deploy --prebuilt --prod --token=${VERCEL_TOKEN}
