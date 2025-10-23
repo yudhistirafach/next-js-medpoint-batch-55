@@ -35,7 +35,11 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Build Project di Vercel
+      - name: Pull Vercel project settings
+        run: |
+          npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+
+      - name: Build Project in Vercel
         run: npx vercel build --token=$VERCEL_TOKEN
 
       - name: Install vercel CLI
