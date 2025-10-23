@@ -31,7 +31,7 @@ jobs:
 
       - name: Setup Gitea token for dependencies
         run: |
-          git config --global url."https://${GITEA_USERNAME}:${GITEA_TOKEN}@gitea.sev-2.com".insteadOf "https://gitea.sev-2.com"
+          git config --global url."https://${GITEA_USERNAME}:${GITEA_TOKEN}@gitea.sev-2.com".insteadOf ssh://gitea.sev-2.com
 
       - name: Install dependencies
         run: yarn install
