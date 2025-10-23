@@ -11,6 +11,7 @@ env:
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
   NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+  GITEA_TOKEN: ${{ secrets.GITEA_ACCESS_TOKEN }}
 
 jobs:
   deploy:
@@ -28,8 +29,6 @@ jobs:
           cache: "yarn"
 
       - name: Setup Gitea token for dependencies
-        env:
-          GITEA_TOKEN: ${{ secrets.GITEA_ACCESS_TOKEN }}
         run: |
           git config --global url."https://${GITEA_TOKEN}@gitea.sev-2.com".insteadOf ssh://gitea.sev-2.com
 
