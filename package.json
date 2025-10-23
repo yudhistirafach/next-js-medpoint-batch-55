@@ -23,7 +23,7 @@
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.47.12",
     "axios": "^1.7.9",
-    "jekoneng-web-ui": "https://yudhistirafach:e901940c56792bc81f38b7cb33e2fa64fd08cdaa@gitea.sev-2.com/pre-ip/next-js-medpoint-batch-55.git",
+    "jekoneng-web-ui": "git+ssh://gitea.sev-2.com/refactory/jekoneng-web-ui#main",
     "next": "15.1.4",
     "next-intl": "^3.26.3",
     "react": "^19.0.0",
